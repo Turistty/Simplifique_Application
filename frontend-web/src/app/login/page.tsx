@@ -36,7 +36,7 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex bg-gray-50">
       {/* <<ThemeToggle /> não ta funcionando */}
-      <div className="hidden md:flex w-1/2 bg-gradient-to-br from-[#050a20] to-[#002060] items-center justify-center p-10">
+      <div className="hidden md:flex w-1/2 bg-gradient-to-br from-[#00205b] to-[#1e2a63] items-center justify-center p-10">
         <div className="text-center max-w-md">
           <div className="flex justify-center mb-6">
             <div className="flex items-center justify-center">
@@ -62,7 +62,7 @@ export default function LoginPage() {
       <div className="flex flex-1 items-center justify-center p-8">
         <div className="w-full max-w-md bg-white rounded-xl shadow-lg p-8 space-y-6">
            {/* MAHLE no topo */}
-          <h1 className="text-4xl font-extrabold text-[#002060] text-center tracking-widest">
+          <h1 className="text-4xl font-extrabold text-[#00205b] text-center tracking-widest">
             MAHLE
           </h1>
           <h2 className="text-3xl font-bold text-[#1E2A63] text-center">Acesse sua conta</h2>
