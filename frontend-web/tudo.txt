@@ -1,0 +1,49 @@
+Simplifique/
+│
+├── Backend.Api/                    # API Flask (Python) ou Pode (PowerShell)
+│   ├── Modules/                    # Módulos de negócio (mesma divisão que você já tem)
+│   │   ├─ Simplifique_Config/
+│   │   ├─ Simplifique_Logging/
+│   │   ├─ Simplifique_Auth/
+│   │   ├─ Simplifique_Data/
+│   │   ├─ Simplifique_Users/
+│   │   ├─ Simplifique_Points/
+│   │   ├─ Simplifique_Rewards/
+│   │   ├─ Simplifique_Redemption/
+│   │   ├─ Simplifique_Import/
+│   │   ├─ Simplifique_Reporting/
+│   │   └─ Simplifique_Email/
+│   ├── Assets/
+│   │   └─ pdf-templates/           # Templates PDF do backend
+│   ├── Config/
+│   │   └─ appsettings.json         # Config do backend
+│   └── Start-Api.ps1               # Script para iniciar a API
+│
+├── Frontend.Web/                   # Novo frontend em Next.js + React
+│   ├── package.json                # Dependências do frontend
+│   ├── next.config.js              # Config do Next.js
+│   ├── public/                     # Assets estáticos (ícones, logos, imagens)
+│   │   ├─ icons/
+│   │   └─ logos/
+│   ├── src/
+│   │   ├── app/                    # Rotas e páginas do Next.js
+│   │   │   ├─ login/               # Tela de login
+│   │   │   ├─ admin/               # Painel do administrador
+│   │   │   ├─ user/                # Painel do usuário
+│   │   │   ├─ rewards/             # Catálogo de brindes
+│   │   │   └─ redemption/          # Fluxo de resgate
+│   │   ├── components/             # Componentes reutilizáveis (Botões, Navbar, Card, etc.)
+│   │   ├── hooks/                  # Hooks React (ex: useAuth, useFetch)
+│   │   ├── lib/                    # Helpers e configs (ex: cliente da API)
+│   │   └── styles/                 # Estilos globais (TailwindCSS, etc.)
+│   ├── tsconfig.json               # Se usar TypeScript
+│   └── .env.local                  # Variáveis (ex: URL da API do backend)
+│
+├── deploy/
+│   └── build.ps1                   # Script para build/deploy backend e frontend
+│
+├── tests/
+│   ├── backend/                    # Testes da API (unit/integration)
+│   └── frontend/                   # Testes do frontend (Jest/RTL, Cypress para E2E)
+│
+└── README.md
