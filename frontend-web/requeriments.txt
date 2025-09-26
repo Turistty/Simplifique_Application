@@ -6,3 +6,4 @@ tailwindcss
 postcss
 eslint
 @eslint/eslintrc
+jose

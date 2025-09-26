@@ -1,3 +1,4 @@
-Flask
+Flask>=2.3
 flask-cors
-flask-sqlalchemy
+PyJWT>=2.8
+python-dotenv>=1.0
