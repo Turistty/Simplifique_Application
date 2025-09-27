@@ -1,14 +1,29 @@
 Simplifique/
 │
 ├── backend-web/                    
-│   ├── Modules/                   
-│   │   └─ Auth/
-│   │       ├─__init__.py
-│   │       └─ auth.py
-│   │   
-│   ├── app.py
-|   └── requeriments.txt
-│  	
+│   ├── Modules/
+│   │   ├── Auth/
+│   │   │   ├── __init__.py
+│   │   │   ├── auth_service.py        # regras de autenticação
+│   │   │   └── auth_controller.py     # rotas Flask de login
+│   │   │
+│   │   ├── Users/
+│   │   │   ├── __init__.py
+│   │   │   ├── user_repository.py     # leitura de users.txt (ou SQL futuramente)
+│   │   │   └── user_service.py        # regras de negócio de usuários
+│   │   │
+│   │   ├── Pontos/
+│   │   │   ├── __init__.py
+│   │   │   ├── pontos_repository.py   # leitura de pontos.txt (ou SQL futuramente)
+│   │   │   └── pontos_service.py      # cálculo de saldos
+│   │   │
+│   │   └── Shared/
+│   │       ├── __init__.py
+│   │       └── db_connection.py       # conexão futura com SQL Server
+│   │
+│   ├── app.py                         # inicialização Flask e registro de rotas
+│   └── requirements.txt
+│
 ├── frontend-web/                   
 │   ├── package.json                
 │   ├── next.config.js              

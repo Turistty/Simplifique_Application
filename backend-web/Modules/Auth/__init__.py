@@ -1,6 +1,3 @@
-from flask import Blueprint
-from .auth import login
 
-auth_bp = Blueprint("auth_bp", __name__)
-
-auth_bp.route("/api/login", methods=["POST"])(login)
+# Modules/Auth/__init__.py
+from .auth_service import autenticar
