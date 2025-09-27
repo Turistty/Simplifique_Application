@@ -2,6 +2,7 @@
 
 import React, { ReactNode, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import axios from "axios";
 
 /* Tipos */
 interface User {
@@ -14,7 +15,7 @@ interface BackendBalances {
   saldoAtualPts: number; // saldo disponível em pontos
   pontosRetiradosPts: number;
   pontosProcessandoPts: number;
-  saldoTotalPts: number; // enviado pelo backend 
+  saldoTotalPts: number; // enviado pelo backend
 }
 
 /* Props de modal/drawer */
@@ -44,43 +45,68 @@ export default function UserPage(): React.ReactElement {
   const router = useRouter();
 
   /* Dados do usuário (identidade) */
-  const [user] = useState<User>({
-    nome: "Evandro Faria",
+  const [user, setUser] = useState<User>({
+    nome: "",
     avatarColor: "from-[#0b5ed7] to-[#06b6d4]",
   });
 
-  /* Estados que vêm do backend — fonte da verdade - critico
-     - NÃO calcular totals no cliente por segurança
-     - Inicializar com null para forçar usar valores vindos do backend
-  */
+  /* Estados que vêm do backend — fonte da verdade */
   const [backendBalances, setBackendBalances] = useState<BackendBalances | null>(null);
 
   /* UI states */
   const [openHistory, setOpenHistory] = useState<boolean>(false);
   const [openSimplifiques, setOpenSimplifiques] = useState<boolean>(false);
 
-  /* Mock fetch: substituir por fetch/axios real que retorna BackendBalances do servidor */
+  /* Histórico vindo do backend */
+  const [history, setHistory] = useState<{ id: string | number; date: string; points: number; status: string }[]>([]);
+
+  /* Carregar usuário e pontos do backend */
   useEffect(() => {
-    // Simulação de chamada segura ao backend: o backend já retorna todos os saldos prontos
-    const timer = setTimeout(() => {
-      const mockFromBackend: BackendBalances = {
-        saldoAtualPts: 1200, // pontos disponíveis
-        pontosRetiradosPts: 450,
-        pontosProcessandoPts: 200,
-        saldoTotalPts: 1850, 
-      };
-      setBackendBalances(mockFromBackend);
-    }, 450); // simula latência de rede
+    // Busca o usuário salvo no login
+    const stored = localStorage.getItem("usuario");
+    const usuario = stored ? JSON.parse(stored) : null;
 
-    return () => clearTimeout(timer);
-  }, []);
+    if (!usuario?.id) {
+      router.push("/"); // se não estiver logado, volta para login
+      return;
+    }
 
-  /* Dados mock de histórico e simplifiques (substituir por chamadas reais) */
-  const history = [
-    { id: 1, date: "2025-09-20", points: 200, status: "Concluído" },
-    { id: 2, date: "2025-08-12", points: 250, status: "Concluído" },
-  ];
+    // Define o nome no header a partir do backend
+    setUser((prev) => ({
+      ...prev,
+      nome: usuario.nome || "Usuário",
+    }));
 
+    // Busca saldos e histórico em uma única chamada
+    axios
+      .get(`http://localhost:5000/api/pontos/${usuario.id}`)
+      .then((res) => {
+        const data = res.data;
+
+        // Mapear saldos
+        const mappedBalances: BackendBalances = {
+          saldoAtualPts: data.saldo_atual,
+          pontosRetiradosPts: data.retirado,
+          pontosProcessandoPts: data.em_processamento,
+          saldoTotalPts: data.total,
+        };
+        setBackendBalances(mappedBalances);
+
+        // Mapear histórico
+        const mappedHistory = (data.historico || []).map((h: any) => ({
+          id: h.id,
+          date: h.data_movimento,
+          points: h.quantidade,
+          status: h.status === "confirmado" ? "Concluído" : h.status,
+        }));
+        setHistory(mappedHistory);
+      })
+      .catch((err) => {
+        console.error("Erro ao buscar pontos:", err);
+      });
+  }, [router]);
+
+  /* Simplifiques ainda mockado (não temos backend para isso ainda) */
   const simplifiques = [
     { id: "Em implementação", date: "2025-09-23", valuePts: 0 },
   ];
@@ -98,7 +124,9 @@ export default function UserPage(): React.ReactElement {
             </div>
             <div>
               <h1 className="text-2xl sm:text-3xl font-extrabold">MAHLE • Área do Usuário</h1>
-              <p className="mt-1 text-sm sm:text-base">Bem-vindo, <span className="font-semibold">{user.nome}</span> 👋</p>
+              <p className="mt-1 text-sm sm:text-base">
+                Bem-vindo, <span className="font-semibold">{user.nome || "Usuário"}</span> 👋
+              </p>
             </div>
           </div>
 

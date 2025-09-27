@@ -22,6 +22,9 @@ export default function LoginPage() {
         username,
         password,
       });
+      // Salva o usuário no localStorage
+      localStorage.setItem("usuario", JSON.stringify(res.data.usuario));  
+
       if (res.data.role === "admin") {
         router.push("/admin");
       } else {
