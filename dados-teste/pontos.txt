@@ -1,0 +1,6 @@
+ID;UsuarioID;Tipo;Quantidade;Status;Origem;ReferenciaID;Observacao;DataMovimento;RegistradoPor
+1;1;credito;600;confirmado;Saldo inicial importado;;Saldo líquido até 27/09/2025;2025-09-27 16:45:00;1
+2;1;debito;200;processando;Resgate;101;Caneca Mahle Pro;2025-09-28 10:30:00;1
+3;1;debito;200;cancelado;Resgate;101;Pedido cancelado pelo usuário;2025-09-28 11:00:00;1
+4;2;credito;1200;confirmado;Saldo inicial importado;;Saldo líquido até 27/09/2025;2025-09-27 16:45:00;1
+5;2;debito;500;confirmado;Resgate;102;Camiseta Polo Tech entregue;2025-09-28 14:00:00;2

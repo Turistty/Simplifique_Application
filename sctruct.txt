@@ -1,0 +1,42 @@
+Simplifique/
+│
+├── backend-web/                    
+│   ├── Modules/                   
+│   │   └─ Auth/
+│   │       ├─__init__.py
+│   │       └─ auth.py
+│   │   
+│   ├── app.py
+|   └── requeriments.txt
+│  	
+├── frontend-web/                   
+│   ├── package.json                
+│   ├── next.config.js              
+│   ├── requeriments.txt
+│   ├── tailwind.config.js
+│   ├── public/
+|   |	 └─ logos/
+|   |       ── Simplifique.png
+│   └── src/
+|	 └─ app/
+|	    ├─ favicon.ico       
+|	    ├─ globals.css       
+|	    ├─ layout.tsx       
+|	    ├─ page.tsx       
+|	    ├─ admin/
+|   	|       └── page.tsx
+|	    ├─ componentes/
+|   	|       └── ThemeToggle.tsx       
+|	    ├─ login/
+|   	|       └── page.tsx     
+|	    ├─ rewards/
+|   	|       └── page.tsx      
+|	    └── user/
+|   	        └── page.tsx        
+|
+|
+|
+|
+└── dados-teste/
+     ├── users.txt 
+     └── pontos.txt
