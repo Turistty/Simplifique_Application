@@ -1,4 +1,6 @@
-Flask
-flask-cors
-bcrypt
-
+flask==3.0.3
+flask-cors==4.0.1
+bcrypt==4.1.2
+pyjwt==2.9.0
+python-dotenv==1.0.0
+pysqlserver==0.4.2

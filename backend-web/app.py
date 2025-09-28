@@ -1,19 +1,17 @@
+# app.py
 from flask import Flask
 from flask_cors import CORS
 from Modules.Auth.auth_controller import auth_bp
-from Modules.Pontos.pontos_service import calcular_saldos
-from flask import jsonify
-
+from Modules.Pontos.pontos_controller import pontos_bp  # veremos já
 app = Flask(__name__)
-CORS(app, resources={r"/api/*": {"origins": "*"}})
+app.config["SECRET_KEY"] = "troque-por-uma-chave-forte"
 
-# registra rotas de login
+# Permitir credenciais entre 3000 ↔ 5000
+CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"}}, supports_credentials=True)
+
 app.register_blueprint(auth_bp)
-
-# rota de pontos
-@app.route("/api/pontos/<int:usuario_id>", methods=["GET"])
-def pontos_usuario(usuario_id):
-    return jsonify(calcular_saldos(usuario_id))
+app.register_blueprint(pontos_bp)
 
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
+# --- IGNORE ---

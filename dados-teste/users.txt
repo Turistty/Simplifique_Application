@@ -1,5 +1,5 @@
 ID;NP;SenhaHash;Perfil;NomeCompleto;Departamento;Ativo;UltimoLogin;DataCadastro
 1;1111;$2b$12$UdiSrrrszZEwg25imuXSzeM9sMSu5pM60ZmW9zGVwzwHK5QZxpqyO;admin;Bruno Barbosa;TI;1;2025-09-27 14:32:00;2025-01-10 09:00:00
-2;2222;$2b$12$UdiSrrrszZEwg25imuXSzeM9sMSu5pM60ZmW9zGVwzwHK5QZxpqyO;user;Ana Costa;Marketing;1;2025-09-25 18:10:00;2025-01-12 11:20:00
+2;2222;$2b$12$UdiSrrrszZEwg25imuXSzeM9sMSu5pM60ZmW9zGVwzwHK5QZxpqyO;user;Bruno Almeida;Marketing;1;2025-09-25 18:10:00;2025-01-12 11:20:00
 3;3333;$2b$12$Zp8Q1m5...;user;Pedro Lima;Financeiro;1;2025-09-20 09:45:00;2025-01-15 08:30:00
 4;4444;$2b$12$Wq3R7n8...;moderator;Joana Souza;RH;0;2025-08-30 17:00:00;2025-01-18 10:15:00

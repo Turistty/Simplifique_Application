@@ -2,10 +2,17 @@ Simplifique/
 │
 ├── backend-web/                    
 │   ├── Modules/
+│   │   ├── Admin/
+│   │   │   ├── __init__.py
+│   │   │   ├── admin_service.py        # regras de autenticação
+│   │   │   ├── admin_controller.py     # rotas Flask de login
+│   │   │   └── admin_middleware.py 
+│   │   │
 │   │   ├── Auth/
 │   │   │   ├── __init__.py
 │   │   │   ├── auth_service.py        # regras de autenticação
-│   │   │   └── auth_controller.py     # rotas Flask de login
+│   │   │   ├── auth_controller.py     # rotas Flask de login
+│   │   │   └── auth_middleware.py 
 │   │   │
 │   │   ├── Users/
 │   │   │   ├── __init__.py
@@ -15,7 +22,8 @@ Simplifique/
 │   │   ├── Pontos/
 │   │   │   ├── __init__.py
 │   │   │   ├── pontos_repository.py   # leitura de pontos.txt (ou SQL futuramente)
-│   │   │   └── pontos_service.py      # cálculo de saldos
+│   │   │   ├── pontos_service.py      # cálculo de saldos
+│   │   │   └── ponots_controller.py 
 │   │   │
 │   │   └── Shared/
 │   │       ├── __init__.py
@@ -29,28 +37,31 @@ Simplifique/
 │   ├── next.config.js              
 │   ├── requeriments.txt
 │   ├── tailwind.config.js
+│   ├── middleware.ts
 │   ├── public/
 |   |	 └─ logos/
-|   |       ── Simplifique.png
+|   |         └── Simplifique.png
 │   └── src/
+│     ├──lib/
+|	 |   └── api.ts 
 |	 └─ app/
 |	    ├─ favicon.ico       
 |	    ├─ globals.css       
 |	    ├─ layout.tsx       
 |	    ├─ page.tsx       
 |	    ├─ admin/
-|   	|       └── page.tsx
+|   	    |  ├── page.tsx
+|   	    |  └── AdminDashboard.tsx
 |	    ├─ componentes/
-|   	|       └── ThemeToggle.tsx       
+|   	    |  └── ThemeToggle.tsx       
 |	    ├─ login/
-|   	|       └── page.tsx     
+|   	    |  └── page.tsx     
 |	    ├─ rewards/
-|   	|       └── page.tsx      
+|   	    |  ├── page.tsx 
+|   	    |  └── RewardsShop.tsx     
 |	    └── user/
-|   	        └── page.tsx        
-|
-|
-|
+|   	       ├── page.tsx 
+|   	       └── UserDashboard.tsx      
 |
 └── dados-teste/
      ├── users.txt 

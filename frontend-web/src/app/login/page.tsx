@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import axios from "axios";
+import { api } from "@/lib/api";
 import ThemeToggle from "../components/ThemeToggle";
 
 export default function LoginPage() {
@@ -14,27 +14,25 @@ export default function LoginPage() {
   const [error, setError] = useState("");
   const router = useRouter();
 
-  const handleLogin = async () => {
-    setLoading(true);
-    setError("");
-    try {
-      const res = await axios.post("http://localhost:5000/api/login", {
-        username,
-        password,
-      });
-      // Salva o usuário no localStorage
-      localStorage.setItem("usuario", JSON.stringify(res.data.usuario));  
 
-      if (res.data.role === "admin") {
-        router.push("/admin");
-      } else {
-        router.push("/user");
-      }
-    } catch (err: any) {
-      setError(err.response?.data?.message || "Erro ao fazer login");
+// função crítica de login/ sempre usar http-only cookies // nunca salvar tokens no localStorage ou sessionStorage //
+const handleLogin = async () => {
+  setLoading(true);
+  setError("");
+  try {
+    const res = await api.post("/api/login", { username, password });
+    // não salva nada no localStorage, só confia no cookie HTTP-only
+    if (res.data.role === "admin") {
+      router.push("/admin");
+    } else {
+      router.push("/user");
     }
-    setLoading(false);
-  };
+  } catch (err: any) {
+    setError(err.response?.data?.message || "Erro ao fazer login");
+  }
+  setLoading(false);
+};
+
 
   return (
     <div className="min-h-screen flex bg-gray-50">
