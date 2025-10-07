@@ -1,0 +1,83 @@
+debug:
+127.0.0.1 - - [07/Oct/2025 12:21:59] "GET /api/me HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2025 12:21:59] "GET /api/pontos HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2025 12:21:59] "GET /api/me HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2025 12:21:59] "GET /api/pontos HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2025 12:22:01] "GET /api/pontos HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2025 12:22:01] "GET /api/rewards?grouped=1 HTTP/1.1" 500 -
+Traceback (most recent call last):
+  File "C:\Users\ProjetoDigitalização\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ProjetoDigitalização\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 1514, in wsgi_app
+    response = self.handle_exception(e)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ProjetoDigitalização\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask_cors\extension.py", line 176, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ProjetoDigitalização\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ProjetoDigitalização\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ProjetoDigitalização\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask_cors\extension.py", line 176, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ProjetoDigitalização\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ProjetoDigitalização\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ProjetoDigitalização\Desktop\Simplifique\Simplifique_Application\backend-web\Modules\Rewards\rewards_controller.py", line 9, in get_rewards
+    items = list_rewards()
+            ^^^^^^^^^^^^^^
+  File "C:\Users\ProjetoDigitalização\Desktop\Simplifique\Simplifique_Application\backend-web\Modules\Rewards\rewards_service.py", line 5, in list_rewards
+    return get_all_rewards(filepath)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ProjetoDigitalização\Desktop\Simplifique\Simplifique_Application\backend-web\Modules\Rewards\rewards_repository.py", line 22, in get_all_rewards
+    with open(filepath, "r", encoding="utf-8") as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'dados-teste/Data_Brindes.txt'
+127.0.0.1 - - [07/Oct/2025 12:22:01] "GET /api/pontos HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2025 12:22:02] "GET /api/rewards?grouped=1 HTTP/1.1" 500 -
+Traceback (most recent call last):
+  File "C:\Users\ProjetoDigitalização\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ProjetoDigitalização\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 1514, in wsgi_app
+    response = self.handle_exception(e)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ProjetoDigitalização\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask_cors\extension.py", line 176, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ProjetoDigitalização\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ProjetoDigitalização\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ProjetoDigitalização\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask_cors\extension.py", line 176, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ProjetoDigitalização\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ProjetoDigitalização\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ProjetoDigitalização\Desktop\Simplifique\Simplifique_Application\backend-web\Modules\Rewards\rewards_controller.py", line 9, in get_rewards
+    items = list_rewards()
+            ^^^^^^^^^^^^^^
+  File "C:\Users\ProjetoDigitalização\Desktop\Simplifique\Simplifique_Application\backend-web\Modules\Rewards\rewards_service.py", line 5, in list_rewards
+    return get_all_rewards(filepath)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ProjetoDigitalização\Desktop\Simplifique\Simplifique_Application\backend-web\Modules\Rewards\rewards_repository.py", line 22, in get_all_rewards
+    with open(filepath, "r", encoding="utf-8") as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'dados-teste/Data_Brindes.txt'
+127.0.0.1 - - [07/Oct/2025 12:22:04] "GET /api/me HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2025 12:22:04] "GET /api/pontos HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2025 12:22:04] "GET /api/me HTTP/1.1" 200 -
+127.0.0.1 - - [07/Oct/2025 12:22:04] "GET /api/pontos HTTP/1.1" 200 -
