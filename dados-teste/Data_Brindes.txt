@@ -1,29 +1,29 @@
-ID;SKU;Nome;Descricao;Categoria;Tamanho;Custo;URL;Data_Cadastro;Ultima_Modificacao;Ativo
-1;BRD-0001;Caneta;Caneta esferográfica personalizada;Escritorio;;;0;;2025-10-03;2025-10-03;1
-2;BRD-0002;Chaveiro;Chaveiro metálico com logo;Escritorio;;;0;;2025-10-03;2025-10-03;1
-3;BRD-0003;Necessaire;Necessaire compacta para acessórios;Acessorios;;;0;;2025-10-03;2025-10-03;1
-4;BRD-0004;Suporte Celular/GPS;Suporte universal para celular/GPS;Viagem;;;0;;2025-10-03;2025-10-03;1
-5;BRD-0005;Protetor de carro (Solar);Protetor solar para para-brisa;Viagem;;;0;;2025-10-03;2025-10-03;1
-6;BRD-0006;Squeeze de aluminio;Garrafa squeeze de alumínio 500ml;Acessorios;;;0;;2025-10-03;2025-10-03;1
-7;BRD-0007;Bolsa de viagem pequena;Bolsa de viagem compacta;Viagem;;;0;;2025-10-03;2025-10-03;1
-8;BRD-0008;Mochila;Mochila resistente com compartimentos;Viagem;;;0;;2025-10-03;2025-10-03;1
-9;BRD-0009;Kit Churrasco;Kit com utensílios para churrasco;Utilidades;;;0;;2025-10-03;2025-10-03;1
-10;BRD-0010;Caixinha de Som USB;Alto-falante portátil com conexão USB;Eletronicos;;;0;;2025-10-03;2025-10-03;1
-11;BRD-0011;Copo Stanley;Copo térmico estilo Stanley;Escritorio;;;0;;2025-10-03;2025-10-03;1
-12;BRD-0012;Fone de Ouvido;Fone intra-auricular com fio;Eletronicos;;;0;;2025-10-03;2025-10-03;1
-13;BRD-0013;Kit Fitness;Kit de acessórios para exercícios;Fitness;;;0;;2025-10-03;2025-10-03;1
-14;BRD-0014;Kit Ferramentas;Kit básico de ferramentas domésticas;Utilidades;;;0;;2025-10-03;2025-10-03;1
-15;BRD-0015;Bolsa de viagem;Bolsa de viagem tamanho médio;Viagem;;;0;;2025-10-03;2025-10-03;1
-16;BRD-0016;Garrafa de cafe;Garrafa térmica para café;Utilidades;;;0;;2025-10-03;2025-10-03;1
-17;BRD-0017;Camisa Polo - P;Camisa polo personalizada tamanho P;Vestuário;P;0;;2025-10-03;2025-10-03;1
-18;BRD-0018;Camisa Polo - M;Camisa polo personalizada tamanho M;Vestuário;M;0;;2025-10-03;2025-10-03;1
-19;BRD-0019;Camisa Polo - G;Camisa polo personalizada tamanho G;Vestuário;G;0;;2025-10-03;2025-10-03;1
-20;BRD-0020;Camisa Polo - GG;Camisa polo personalizada tamanho GG;Vestuário;GG;0;;2025-10-03;2025-10-03;1
-21;BRD-0021;Moletom Simplifique - P;Moletom “Simplifique” tamanho P;Vestuário;P;0;;2025-10-03;2025-10-03;1
-22;BRD-0022;Moletom Simplifique - M;Moletom “Simplifique” tamanho M;Vestuário;M;0;;2025-10-03;2025-10-03;1
-23;BRD-0023;Moletom Simplifique - G;Moletom “Simplifique” tamanho G;Vestuário;G;0;;2025-10-03;2025-10-03;1
-24;BRD-0024;Moletom Simplifique - GG;Moletom “Simplifique” tamanho GG;Vestuário;GG;0;;2025-10-03;2025-10-03;1
-25;BRD-0025;Kit Gourmet;Kit de utensílios culinários;Utilidades;;;0;;2025-10-03;2025-10-03;1
-26;BRD-0026;Copo Ecologico;Copo reutilizável ecológico;Escritorio;;;0;;2025-10-03;2025-10-03;1
-27;BRD-0027;PowerBank;Carregador portátil PowerBank;Eletronicos;;;0;;2025-10-03;2025-10-03;1
-28;BRD-0028;Kit Maquiagem;Kit básico de maquiagem;Acessorios;;;0;;2025-10-03;2025-10-03;1
+ID;PRODUCT_ID;SKU;Nome;Descricao;Detalhes;Categoria;Tamanho;Custo;Estoque_Inicial;URL;Data_Cadastro;Ultima_Modificacao;Ativo;Tags
+1;1;BRD-0001;Caneta;Caneta esferográfica personalizada;;Escritorio;;300;20;;2025-10-03;2025-10-03;1;
+2;2;BRD-0002;Chaveiro;Chaveiro metálico com logo;;Escritorio;;350;20;;2025-10-03;2025-10-03;1;
+3;3;BRD-0003;Necessaire;Necessaire compacta para acessórios;;Acessorios;;550;20;;2025-10-03;2025-10-03;1;
+4;4;BRD-0004;Suporte Celular/GPS;Suporte universal para celular/GPS;;Viagem;;800;20;;2025-10-03;2025-10-03;1;
+5;5;BRD-0005;Protetor de carro (Solar);Protetor solar para para-brisa;;Viagem;;700;20;;2025-10-03;2025-10-03;1;
+6;6;BRD-0006;Squeeze de aluminio;Garrafa squeeze de alumínio 500ml;;Acessorios;;450;20;;2025-10-03;2025-10-03;1;
+7;7;BRD-0007;Bolsa de viagem pequena;Bolsa de viagem compacta;;Viagem;;1200;20;;2025-10-03;2025-10-03;1;
+8;8;BRD-0008;Mochila;Mochila resistente com compartimentos;;Viagem;;1800;20;;2025-10-03;2025-10-03;1;
+9;9;BRD-0009;Kit Churrasco;Kit com utensílios para churrasco;;Utilidades;;900;20;;2025-10-03;2025-10-03;1;
+10;10;BRD-0010;Caixinha de Som USB;Alto-falante portátil com conexão USB;;Eletronicos;;2200;20;;2025-10-03;2025-10-03;1;
+11;11;BRD-0011;Copo Stanley;Copo térmico estilo Stanley;;Escritorio;;1200;20;;2025-10-03;2025-10-03;1;
+12;12;BRD-0012;Fone de Ouvido;Fone intra-auricular com fio;;Eletronicos;;900;20;;2025-10-03;2025-10-03;1;
+13;13;BRD-0013;Kit Fitness;Kit de acessórios para exercícios;;Fitness;;950;20;;2025-10-03;2025-10-03;1;
+14;14;BRD-0014;Kit Ferramentas;Kit básico de ferramentas domésticas;;Utilidades;;1100;20;;2025-10-03;2025-10-03;1;
+15;15;BRD-0015;Bolsa de viagem;Bolsa de viagem tamanho médio;;Viagem;;1400;20;;2025-10-03;2025-10-03;1;
+16;16;BRD-0016;Garrafa de cafe;Garrafa térmica para café;;Utilidades;;650;20;;2025-10-03;2025-10-03;1;
+17;17;BRD-0017;Camisa Polo;Camisa polo personalizada tamanho P;;Vestuario;P;1200;10;;2025-10-03;2025-10-03;1;
+18;17;BRD-0018;Camisa Polo;Camisa polo personalizada tamanho M;;Vestuario;M;1250;10;;2025-10-03;2025-10-03;1;
+19;17;BRD-0019;Camisa Polo;Camisa polo personalizada tamanho G;;Vestuario;G;1300;10;;2025-10-03;2025-10-03;1;
+20;17;BRD-0020;Camisa Polo;Camisa polo personalizada tamanho GG;;Vestuario;GG;1350;10;;2025-10-03;2025-10-03;1;
+21;21;BRD-0021;Moletom Simplifique;Moletom Simplifique tamanho P;;Vestuario;P;1800;10;;2025-10-03;2025-10-03;1;
+22;21;BRD-0022;Moletom Simplifique;Moletom Simplifique tamanho M;;Vestuario;M;1850;10;;2025-10-03;2025-10-03;1;
+23;21;BRD-0023;Moletom Simplifique;Moletom Simplifique tamanho G;;Vestuario;G;1900;10;;2025-10-03;2025-10-03;1;
+24;21;BRD-0024;Moletom Simplifique;Moletom Simplifique tamanho GG;;Vestuario;GG;1950;10;;2025-10-03;2025-10-03;1;
+25;25;BRD-0025;Kit Gourmet;Kit de utensílios culinários;;Utilidades;;1300;20;;2025-10-03;2025-10-03;1;
+26;26;BRD-0026;Copo Ecologico;Copo reutilizável ecológico;;Escritorio;;400;20;;2025-10-03;2025-10-03;1;
+27;27;BRD-0027;PowerBank;Carregador portátil PowerBank;;Eletronicos;;1600;20;;2025-10-03;2025-10-03;1;
+28;28;BRD-0028;Kit Maquiagem;Kit básico de maquiagem;;Acessorios;;700;20;;2025-10-03;2025-10-03;1;

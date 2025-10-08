@@ -1,4 +1,4 @@
-def get_all_users(filepath="dados-teste/users.txt"):
+def get_all_users(filepath="../dados-teste/users.txt"):
     usuarios = []
     # Abre o arquivo de usuários para leitura
     with open(filepath, "r", encoding="utf-8") as f:
