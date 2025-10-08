@@ -1,9 +1,19 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+/**
+ * Rewards - versão integrada ao backend
+ * - Busca pontos reais:   GET /api/pontos
+ * - Busca brindes (TXT):  GET /api/rewards?grouped=1
+ *   (use /api/rewards sem o query param para 1 linha = 1 item)
+ * - Categorias geradas dinamicamente a partir dos dados
+ * - Fallback de imagem para /logos/Simplifique.png
+ */
+
+import React, { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { api } from "@/lib/api";
 
+// ==== Tipagens ====
 interface Reward {
   id: number;
   name: string;
@@ -25,29 +35,32 @@ interface CartItem extends Reward {
 export default function RewardsPage(): React.ReactElement {
   const router = useRouter();
 
-  // estados
+  // ==== Estados base ====
   const [userPoints, setUserPoints] = useState<number | null>(null);
   const [rewards, setRewards] = useState<Reward[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState<boolean>(true);
 
-  const [search, setSearch] = useState("");
-  const [category, setCategory] = useState("Todas");
+  // ==== Estados de UI ====
+  const [search, setSearch] = useState<string>("");
+  const [category, setCategory] = useState<string>("Todas");
   const [sort, setSort] = useState<"asc" | "desc">("asc");
 
-  const [detailOpen, setDetailOpen] = useState(false);
+  const [detailOpen, setDetailOpen] = useState<boolean>(false);
   const [selected, setSelected] = useState<Reward | null>(null);
-  const [selectedSize, setSelectedSize] = useState("");
+  const [selectedSize, setSelectedSize] = useState<string>("");
 
-  const [cartOpen, setCartOpen] = useState(false);
+  const [cartOpen, setCartOpen] = useState<boolean>(false);
   const [cart, setCart] = useState<CartItem[]>([]);
   const [addingKey, setAddingKey] = useState<string | null>(null);
 
   const [notification, setNotification] = useState<string>("");
 
-    // buscar pontos reais do backend
+  // ==== Buscar pontos reais (mantém seu padrão atual) ====
   useEffect(() => {
-    api.get("/api/pontos")
+    api
+      .get("/api/pontos")
       .then((res) => {
+        // ajuste aqui se o nome do campo for outro:
         setUserPoints(res.data.saldo_atual);
       })
       .catch(() => {
@@ -55,100 +68,105 @@ export default function RewardsPage(): React.ReactElement {
       });
   }, [router]);
 
-  // mock fetch
+  // ==== Buscar catálogo do TXT via backend (substitui o mock) ====
   useEffect(() => {
-    setTimeout(() => {
-      setRewards([
-        {
-          id: 1,
-          name: "Caneca Mahle Pro",
-          description: "Cerâmica premium, 350ml.",
-          details:
-            "Revestimento antiaderente; resistente a micro-ondas e lava-louças.",
-          pointsCost: 500,
-          imageUrl: "/images/caneca.png",
-          category: "Canecas",
-          stock: 12,
-        },
-        {
-          id: 2,
-          name: "Camiseta Polo Tech",
-          description: "100% algodão orgânico.",
-          details:
-            "Modelagem unissex; cores exclusivas; lavar à mão.",
-          pointsCost: 1200,
-          imageUrl: "https://tse3.mm.bing.net/th/id/OIP.TErzhUnjYeWS9iMHmKVT3AHaJf?rs=1&pid=ImgDetMain&o=7&rm=3",
-          category: "Vestuário",
-          sizes: ["P", "M", "G", "GG"],
-          stock: 5,
-        },
-        {
-          id: 3,
-          name: "Boné UltraFit",
-          description: "Tecido respirável.",
-          details:
-            "Velcro ajustável; forro mesh; aba curva.",
-          pointsCost: 800,
-          imageUrl: "/images/bone.png",
-          category: "Acessórios",
-          stock: 20,
-        },
-        {
-          id: 4,
-          name: "Mochila Executive",
-          description: "Para notebook 15”.",
-          details:
-            "Compartimentos internos; alças acolchoadas; proteção RFID.",
-          pointsCost: 2500,
-          imageUrl: "/images/mochila.png",
-          category: "Acessórios",
-          sizes: ['15"', '17"'],
-          stock: 3,
-        },
-      ]);
-      setLoading(false);
-    }, 600);
+    let mounted = true;
+    setLoading(true);
+
+    // Use "?grouped=1" para consolidar variações de tamanho (P/M/G/GG).
+    // Se preferir cada linha do CSV como um item, remova o "?grouped=1".
+    api
+      .get<Reward[]>("/api/rewards")
+      .then((res) => {
+        if (!mounted) return;
+        const data = Array.isArray(res.data) ? res.data : [];
+
+        // Normalização mínima e fallback de imagem
+        const normalized = data.map((r) => ({
+          ...r,
+          imageUrl:
+            r.imageUrl && r.imageUrl.trim() !== ""
+              ? r.imageUrl
+              : "/logos/Simplifique.png",
+          stock: typeof r.stock === "number" ? r.stock : 0,
+        }));
+
+        setRewards(normalized);
+      })
+      .catch((err) => {
+        console.error("Erro ao buscar rewards:", err);
+        setNotification("Não foi possível carregar os brindes. Tente novamente.");
+      })
+      .finally(() => mounted && setLoading(false));
+
+    return () => {
+      mounted = false;
+    };
   }, []);
 
-  // filtrar e ordenar
-  const filtered = rewards
-    .filter((r) =>
-      (category === "Todas" || r.category === category) &&
-      r.name.toLowerCase().includes(search.toLowerCase())
-    )
-    .sort((a, b) =>
+  // ==== Categorias dinâmicas (a partir do TXT) ====
+  const categories = useMemo(() => {
+    const set = new Set<string>();
+    rewards.forEach((r) => set.add(r.category || "Outros"));
+    // "Todas" sempre primeiro, restante ordenado alfabeticamente
+    return ["Todas", ...Array.from(set).sort((a, b) => a.localeCompare(b, "pt-BR"))];
+  }, [rewards]);
+
+  // ==== Filtro + Ordenação ====
+  const filtered = useMemo(() => {
+    const term = search.trim().toLowerCase();
+    const list = rewards.filter(
+      (r) =>
+        (category === "Todas" || r.category === category) &&
+        (r.name.toLowerCase().includes(term) ||
+          r.description.toLowerCase().includes(term))
+    );
+    return list.sort((a, b) =>
       sort === "asc" ? a.pointsCost - b.pointsCost : b.pointsCost - a.pointsCost
     );
+  }, [rewards, category, search, sort]);
 
-  // totais
-  const totalItems = cart.reduce((sum, i) => sum + i.quantity, 0);
-  const totalCartPts = cart.reduce((sum, i) => sum + i.pointsCost * i.quantity, 0);
+  // ==== Totais do carrinho ====
+  const totalItems = useMemo(
+    () => cart.reduce((sum, i) => sum + i.quantity, 0),
+    [cart]
+  );
+  const totalCartPts = useMemo(
+    () => cart.reduce((sum, i) => sum + i.pointsCost * i.quantity, 0),
+    [cart]
+  );
 
-  // notificação
+  // ==== Notificação ====
   function showNotification(msg: string) {
     setNotification(msg);
     setTimeout(() => setNotification(""), 3000);
   }
 
-  // carrinho
+  // ==== Carrinho ====
   function addToCart(item: Reward, size?: string) {
     if (userPoints == null) return;
-    const key = `${item.id}_${size || ""}`;
+
+    const key = `${item.id}_${size ?? ""}`;
     setAddingKey(key);
+
+    // Simula processamento rápido (animação)
     setTimeout(() => {
       setCart((prev) => {
         const exist = prev.find((i) => i.key === key);
         if (exist) {
-          return prev.map((i) =>
-            i.key === key && userPoints >= i.pointsCost * (i.quantity + 1)
-              ? { ...i, quantity: i.quantity + 1 }
-              : i
-          );
+          // só incrementa se não estourar pontos
+          if ((userPoints ?? 0) >= exist.pointsCost * (exist.quantity + 1)) {
+            return prev.map((i) =>
+              i.key === key ? { ...i, quantity: i.quantity + 1 } : i
+            );
+          }
+          showNotification("❌ Pontos insuficientes para adicionar mais unidade(s).");
+          return prev;
         }
         return [...prev, { ...item, quantity: 1, selectedSize: size, key }];
       });
       setAddingKey(null);
-    }, 500);
+    }, 400);
   }
 
   function removeFromCart(key: string) {
@@ -168,13 +186,13 @@ export default function RewardsPage(): React.ReactElement {
       setCart([]);
       setCartOpen(false);
       showNotification("✅ Seu pedido entrou em processamento");
+      // TODO: aqui depois você chama o backend para criar o pedido/movimentação
     } else {
       showNotification("❌ Pontos insuficientes");
     }
   }
 
-  const categories = ["Todas", "Canecas", "Vestuário", "Acessórios"];
-
+  // ==== UI ====
   return (
     <div className="min-h-screen bg-[#ededed] text-[#00205b]">
       {/* HEADER */}
@@ -195,7 +213,7 @@ export default function RewardsPage(): React.ReactElement {
               placeholder="Buscar brinde..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="flex-1 px-4 py-2 rounded-lg border   border-gray-300 text-[#e0d4d4] focus:ring-2 focus:ring-[#41b6e6]"
+              className="flex-1 px-4 py-2 rounded-lg border border-gray-300 text-[#00205b] focus:ring-2 focus:ring-[#41b6e6] bg-white"
             />
             <select
               value={sort}
@@ -230,7 +248,7 @@ export default function RewardsPage(): React.ReactElement {
           </div>
         </div>
 
-        {/* filtros */}
+        {/* filtros de categorias */}
         <nav className="bg-[#ededed]">
           <div className="max-w-6xl mx-auto px-4 overflow-x-auto">
             <ul className="flex gap-3 py-3 whitespace-nowrap">
@@ -256,7 +274,7 @@ export default function RewardsPage(): React.ReactElement {
       {/* GALERIA */}
       <main className="max-w-6xl mx-auto px-4 py-10">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          {(loading ? Array(4).fill(null) : filtered).map((item, idx) => {
+          {(loading ? Array(8).fill(null) : filtered).map((item, idx) => {
             if (loading) {
               return (
                 <div
@@ -267,7 +285,8 @@ export default function RewardsPage(): React.ReactElement {
             }
 
             const affordable = (userPoints ?? 0) >= item.pointsCost;
-            const key = `${item.id}_${item.sizes?.[0] || ""}`;
+            const firstSize = item.sizes?.[0] ?? "";
+            const key = `${item.id}_${firstSize}`;
 
             return (
               <div
@@ -275,28 +294,32 @@ export default function RewardsPage(): React.ReactElement {
                 onClick={() => {
                   setSelected(item);
                   setDetailOpen(true);
-                  setSelectedSize(item.sizes?.[0] || "");
+                  setSelectedSize(firstSize);
                 }}
                 className="group bg-white rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition cursor-pointer overflow-hidden"
               >
-                {/* novo container com padding */}
+                {/* imagem */}
                 <div className="p-4">
                   <div className="relative h-40 bg-[#f9f9f9] rounded-lg flex items-center justify-center">
                     <img
-                      src={item.imageUrl}
+                      src={item.imageUrl || "/logos/Simplifique.png"}
                       alt={item.name}
                       className="max-h-full max-w-full object-contain"
+                      onError={(e) => {
+                        (e.currentTarget as HTMLImageElement).src =
+                          "/logos/Simplifique.png";
+                      }}
                     />
                   </div>
                 </div>
 
+                {/* texto e ações */}
                 <div className="px-4 pb-4 flex flex-col h-full">
                   <h2 className="text-lg font-semibold">{item.name}</h2>
                   <p className="text-sm text-[#75787b] flex-1 mt-2">
                     {item.description}
                   </p>
 
-                  {/* pontuação e estoque */}
                   <div className="mt-2 flex justify-between items-center">
                     <span className="text-xl font-bold text-[#1e2a63]">
                       {item.pointsCost} pts
@@ -310,7 +333,7 @@ export default function RewardsPage(): React.ReactElement {
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
-                        addToCart(item, item.sizes?.[0]);
+                        addToCart(item, firstSize);
                       }}
                       disabled={!affordable || addingKey === key}
                       className={`px-3 py-1 rounded-lg font-semibold transition ${
@@ -340,22 +363,30 @@ export default function RewardsPage(): React.ReactElement {
             <button
               onClick={() => setDetailOpen(false)}
               className="self-end mb-4 text-xl"
+              aria-label="Fechar"
+              title="Fechar"
             >
               ✖
             </button>
+
             <img
-              src={selected.imageUrl}
+              src={selected.imageUrl || "/logos/Simplifique.png"}
               alt={selected.name}
               className="w-full h-48 object-cover rounded-lg"
+              onError={(e) => {
+                (e.currentTarget as HTMLImageElement).src =
+                  "/logos/Simplifique.png";
+              }}
             />
+
             <h2 className="mt-4 text-2xl font-semibold">{selected.name}</h2>
-            <p className="mt-2 text-[#75787b]">{selected.details}</p>
+            <p className="mt-2 text-[#75787b]">
+              {selected.details || selected.description}
+            </p>
 
             {selected.sizes && (
               <div className="mt-4">
-                <label className="block text-sm font-medium mb-1">
-                  Tamanho:
-                </label>
+                <label className="block text-sm font-medium mb-1">Tamanho:</label>
                 <select
                   value={selectedSize}
                   onChange={(e) => setSelectedSize(e.target.value)}
@@ -377,15 +408,14 @@ export default function RewardsPage(): React.ReactElement {
                 </span>
                 <button
                   onClick={() =>
-                    addToCart(
-                      selected,
-                      selected.sizes ? selectedSize : undefined
-                    )
+                    addToCart(selected, selected.sizes ? selectedSize : undefined)
                   }
-                  disabled={addingKey === `${selected.id}_${selectedSize}`}
+                  disabled={
+                    addingKey === `${selected.id}_${selectedSize ?? ""}`
+                  }
                   className="px-4 py-2 bg-[#41b6e6] text-white rounded-lg hover:bg-[#33a1d1] transition"
                 >
-                  {addingKey === `${selected.id}_${selectedSize}`
+                  {addingKey === `${selected.id}_${selectedSize ?? ""}`
                     ? "Adicionando..."
                     : "+ Adicionar"}
                 </button>
@@ -412,23 +442,29 @@ export default function RewardsPage(): React.ReactElement {
             <button
               onClick={() => setCartOpen(false)}
               className="self-end mb-4 text-xl"
+              aria-label="Fechar carrinho"
+              title="Fechar"
             >
               ✖
             </button>
+
             <h2 className="text-2xl font-semibold mb-4">Carrinho</h2>
+
             <div className="flex-1 overflow-auto space-y-4">
               {cart.length === 0 && (
                 <p className="text-gray-500">Carrinho vazio</p>
               )}
+
               {cart.map((item) => (
-                <div
-                  key={item.key}
-                  className="flex items-center gap-3"
-                >
+                <div key={item.key} className="flex items-center gap-3">
                   <img
-                    src={item.imageUrl}
+                    src={item.imageUrl || "/logos/Simplifique.png"}
                     alt={item.name}
                     className="w-16 h-16 object-cover rounded-lg"
+                    onError={(e) => {
+                      (e.currentTarget as HTMLImageElement).src =
+                        "/logos/Simplifique.png";
+                    }}
                   />
                   <div className="flex-1">
                     <p className="font-medium">{item.name}</p>
@@ -445,12 +481,16 @@ export default function RewardsPage(): React.ReactElement {
                     <button
                       onClick={() => removeFromCart(item.key)}
                       className="p-1 hover:bg-gray-100 rounded"
+                      aria-label="Diminuir"
+                      title="Diminuir"
                     >
                       –
                     </button>
                     <button
                       onClick={() => addToCart(item, item.selectedSize)}
                       className="p-1 hover:bg-gray-100 rounded"
+                      aria-label="Aumentar"
+                      title="Aumentar"
                     >
                       +
                     </button>
@@ -458,6 +498,7 @@ export default function RewardsPage(): React.ReactElement {
                 </div>
               ))}
             </div>
+
             <div className="mt-6">
               <p className="flex justify-between font-semibold">
                 Total: <span>{totalCartPts} pts</span>
@@ -467,7 +508,7 @@ export default function RewardsPage(): React.ReactElement {
                 disabled={userPoints == null || userPoints < totalCartPts}
                 className={`w-full mt-4 py-3 rounded-lg text-white font-semibold transition ${
                   userPoints != null && userPoints >= totalCartPts
-                    ? "bg-[#43b02a] hover:bg-forest"
+                    ? "bg-[#43b02a] hover:opacity-90"
                     : "bg-[#c8c9c7] cursor-not-allowed text-[#75787b]"
                 }`}
               >
