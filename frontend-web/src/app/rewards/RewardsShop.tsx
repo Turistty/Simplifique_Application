@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { api } from "@/lib/api";
 
 // ---------- Tipos vindos do backend ----------
-// substituir a definição de BackendBrinde por esta
 type BackendBrinde = {
   id?: number;
   ID?: string;
@@ -447,11 +446,11 @@ export default function RewardsPage(): React.ReactElement {
               className="relative px-3 py-2 bg-white text-[#00205b] rounded-lg hover:bg-[#f0f0f0] transition"
             >
               🛒
-              {totalItems > 0 && (
-                <span className="absolute -top-1 -right-1 bg-red text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
+                {totalItems > 0 && (
+                <span className="absolute -top-1 -right-1 bg-[#ff3b30] text-white text-xs w-5 h-5 flex items-center justify-center rounded-full font-bold shadow-md border-2 border-white">
                   {totalItems}
                 </span>
-              )}
+                )}
             </button>
           </div>
         </div>
@@ -480,61 +479,73 @@ export default function RewardsPage(): React.ReactElement {
       </header>
 
       {/* GALERIA */}
-      <main className="max-w-6xl mx-auto px-4 py-10">
+      <main className="max-w-6xl mx-auto px-4 py-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {(loading ? Array(4).fill(null) : filtered).map((item, idx) => {
-            if (loading) {
-              return <div key={idx} className="h-96 bg-[#c6d6e3] rounded-xl animate-pulse" />;
-            }
+        if (loading) {
+          return <div key={idx} className="h-80 bg-[#c6d6e3] rounded-xl animate-pulse" />;
+        }
 
-            const firstVariant = getFirstVariant(item);
-            const defaultSize = item.sizes?.[0] || firstVariant?.size || "";
-            const effectiveCost = item.pointsCost || 0;
-            const affordable = (userPoints ?? 0) >= effectiveCost;
-            const key = `${firstVariant?.id || item.id}_${defaultSize}`;
+        const firstVariant = getFirstVariant(item);
+        const defaultSize = item.sizes?.[0] || firstVariant?.size || "";
+        const effectiveCost = item.pointsCost || 0;
+        const affordable = (userPoints ?? 0) >= effectiveCost;
+        const key = `${firstVariant?.id || item.id}_${defaultSize}`;
 
-            return (
-              <div
-                key={item.id}
-                onClick={() => {
-                  setSelected(item);
-                  setDetailOpen(true);
-                  setSelectedSize(defaultSize);
-                }}
-                className="group bg-white rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition cursor-pointer overflow-hidden"
-              >
-                <div className="p-4">
-                  <div className="relative h-40 bg-[#f9f9f9] rounded-lg flex items-center justify-center">
-                    <img src={item.imageUrl || "/logos/Simplifique.png"} alt={item.name} className="max-h-full max-w-full object-contain" />
-                  </div>
-                </div>
-
-                <div className="px-4 pb-4 flex flex-col h-full">
-                  <h2 className="text-lg font-semibold">{item.name}</h2>
-                  <p className="text-sm text-[#75787b] flex-1 mt-2">{item.description}</p>
-
-                  <div className="mt-2 flex justify-between items-center">
-                    <span className="text-xl font-bold text-[#1e2a63]">{effectiveCost > 0 ? `${effectiveCost} pts` : "Indisponível"}</span>
-                    <span className="text-sm text-[#75787b]">Estoque: {item.stock}</span>
-                  </div>
-
-                  <div className="mt-4 flex items-center justify-between">
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        addToCart(item, defaultSize || undefined);
-                      }}
-                      disabled={effectiveCost <= 0 || !affordable || addingKey === key}
-                      className={`px-3 py-1 rounded-lg font-semibold transition ${
-                        effectiveCost > 0 && affordable ? "bg-[#41b6e6] text-white hover:bg-[#33a1d1]" : "bg-[#c8c9c7] text-[#75787b] cursor-not-allowed"
-                      }`}
-                    >
-                      {addingKey === key ? "Adicionando..." : "+ Carrinho"}
-                    </button>
-                  </div>
-                </div>
+        return (
+            <div
+            key={item.id}
+            onClick={() => {
+              setSelected(item);
+              setDetailOpen(true);
+              setSelectedSize(defaultSize);
+            }}
+            className="group bg-white rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition cursor-pointer overflow-hidden flex flex-col"
+            >
+            <div className="p-4">
+              <div className="relative h-40 bg-[#ffffff] rounded-lg flex items-center justify-center">
+              <img src={item.imageUrl || "/logos/Simplifique.png"} alt={item.name} className="max-h-full max-w-full object-contain" />
               </div>
-            );
+            </div>
+
+            <div className="px-4 pb-4 flex flex-col flex-1">
+
+              <h2 className="text-lg font-semibold">{item.name}</h2>
+              <p className="text-sm text-[#75787b] flex-1 mt-2">{item.description}</p>
+
+              <div className="mt-2 flex justify-between items-center">
+              <span className="text-xl font-bold text-[#1e2a63]">{effectiveCost > 0 ? `${effectiveCost} pts` : "Indisponível"}</span>
+              <span className="text-sm text-[#75787b]">Estoque: {item.stock}</span>
+              </div>
+
+              <div className="mt-4 flex items-center justify-between">
+              <button
+                onClick={(e) => {
+                e.stopPropagation();
+                addToCart(item, defaultSize || undefined);
+                }}
+                disabled={
+                  effectiveCost <= 0 ||
+                  !affordable ||
+                  addingKey === key ||
+                  (firstVariant?.stock ?? item.stock) <= 0
+                }
+                className={`px-10 py-1 rounded-lg font-semibold transition ${
+                  effectiveCost > 0 && affordable && (firstVariant?.stock ?? item.stock) > 0
+                  ? "bg-[#200b50] text-white hover:bg-[#33a1d1]"
+                  : "bg-[#c8c9c7] text-[#75787b] cursor-not-allowed"
+                } mx-auto block`}
+                >
+                {addingKey === key
+                ? "Adicionando..."
+                : (firstVariant?.stock ?? item.stock) <= 0
+                ? "Sem estoque"
+                : "+ Carrinho"}
+              </button>
+              </div>
+            </div>
+            </div>
+        );
           })}
         </div>
       </main>
@@ -547,9 +558,10 @@ export default function RewardsPage(): React.ReactElement {
             <button onClick={() => setDetailOpen(false)} className="self-end mb-4 text-xl">
               ✖
             </button>
-            <img src={selected.imageUrl || "/logos/Simplifique.png"} alt={selected.name} className="w-full h-48 object-cover rounded-lg" />
+            <img src={selected.imageUrl || "/logos/Simplifique.png"} alt={selected.name} className="w-full h-100 object-cover rounded-lg" />
             <h2 className="mt-4 text-2xl font-semibold">{selected.name}</h2>
             <p className="mt-2 text-[#75787b]">{selected.description}</p>
+            <p className="mt-2 text-sm text-[#75787b] whitespace-pre-line">{selected.details}</p>
 
             {selected.sizes && selected.sizes.length > 0 && (
               <div className="mt-4">
@@ -590,40 +602,40 @@ export default function RewardsPage(): React.ReactElement {
       )}
 
       {/* DRAWER — Carrinho */}
-      {cartOpen && (
-        <div className="fixed inset-0 z-40 flex">
-          <div className="absolute inset-0 bg-black/50" onClick={() => setCartOpen(false)} />
-          <aside className="relative ml-auto bg-white w-full max-w-sm h-full p-6 shadow-2xl flex flex-col">
-            <button onClick={() => setCartOpen(false)} className="self-end mb-4 text-xl">
-              ✖
+        {cartOpen && (
+          <div className="fixed inset-0 z-40 flex">
+            <div className="absolute inset-0 bg-black/50" onClick={() => setCartOpen(false)} />
+            <aside className="relative ml-auto bg-white w-full max-w-sm h-full p-6 shadow-2xl flex flex-col">
+          <button onClick={() => setCartOpen(false)} className="self-end mb-4 text-xl">
+            ✖
+          </button>
+          <h2 className="text-2xl font-semibold mb-4">Carrinho</h2>
+          <div className="flex-1 overflow-auto space-y-4">
+            {cart.length === 0 && <p className="text-gray-500">Carrinho vazio</p>}
+            {cart.map((item) => (
+              <div key={item.key} className="flex items-center gap-3">
+            <img src={item.imageUrl || "/logos/Simplifique.png"} alt={item.name} className="w-16 h-16 object-cover rounded-lg" />
+            <div className="flex-1">
+              <p className="font-medium">{item.name}</p>
+              {item.selectedSize && <p className="text-sm text-[#75787b]">Tamanho: {item.selectedSize}</p>}
+              <p className="text-sm text-[#75787b]">{item.pointsCost} pts × {item.quantity}</p>
+            </div>
+            <div className="flex items-center gap-1">
+              <button onClick={() => removeFromCart(item.key)} className="p-1 hover:bg-gray-100 rounded">–</button>
+              <button onClick={() => setCart((prev) => prev.map((i) => i.key === item.key ? { ...i, quantity: i.quantity + 1 } : i))} className="p-1 hover:bg-gray-100 rounded">+</button>
+            </div>
+              </div>
+            ))}
+          </div>
+          <div className="mt-6">
+            <p className="flex justify-between font-semibold">Total: <span>{totalCartPts} pts</span></p>
+            <button onClick={checkout} disabled={userPoints == null || userPoints < totalCartPts} className={`w-full mt-4 py-3 rounded-lg text-white font-semibold transition ${userPoints != null && userPoints >= totalCartPts ? "bg-[#43b02a] hover:bg-forest" : "bg-[#c8c9c7] cursor-not-allowed text-[#75787b]"}`}>
+              Finalizar Resgate
             </button>
-            <h2 className="text-2xl font-semibold mb-4">Carrinho</h2>
-            <div className="flex-1 overflow-auto space-y-4">
-              {cart.length === 0 && <p className="text-gray-500">Carrinho vazio</p>}
-              {cart.map((item) => (
-                <div key={item.key} className="flex items-center gap-3">
-                  <img src={item.imageUrl || "/logos/Simplifique.png"} alt={item.name} className="w-16 h-16 object-cover rounded-lg" />
-                  <div className="flex-1">
-                    <p className="font-medium">{item.name}</p>
-                    {item.selectedSize && <p className="text-sm text-[#75787b]">Tamanho: {item.selectedSize}</p>}
-                    <p className="text-sm text-[#75787b]">{item.pointsCost} pts × {item.quantity}</p>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <button onClick={() => removeFromCart(item.key)} className="p-1 hover:bg-gray-100 rounded">–</button>
-                    <button onClick={() => setCart((prev) => prev.map((i) => i.key === item.key ? { ...i, quantity: i.quantity + 1 } : i))} className="p-1 hover:bg-gray-100 rounded">+</button>
-                  </div>
-                </div>
-              ))}
-            </div>
-            <div className="mt-6">
-              <p className="flex justify-between font-semibold">Total: <span>{totalCartPts} pts</span></p>
-              <button onClick={checkout} disabled={userPoints == null || userPoints < totalCartPts} className={`w-full mt-4 py-3 rounded-lg text-white font-semibold transition ${userPoints != null && userPoints >= totalCartPts ? "bg-[#43b02a] hover:bg-forest" : "bg-[#c8c9c7] cursor-not-allowed text-[#75787b]"}`}>
-                Finalizar Resgate
-              </button>
-            </div>
-          </aside>
-        </div>
-      )}
+          </div>
+            </aside>
+          </div>
+        )}
 
       {/* Notificação */}
       {notification && (

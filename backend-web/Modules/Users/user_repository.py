@@ -19,6 +19,6 @@ def get_all_users(filepath="../dados-teste/users.txt"):
             })
     return usuarios  # Retorna a lista de usuários
 
-def get_user_by_np(np, filepath="dados-teste/users.txt"):
+def get_user_by_np(np, filepath="../dados-teste/users.txt"):
     # Busca o usuário pelo campo 'np'
     return next((u for u in get_all_users(filepath) if u["np"] == np), None)

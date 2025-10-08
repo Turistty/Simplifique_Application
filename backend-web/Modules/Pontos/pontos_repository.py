@@ -1,4 +1,4 @@
-def get_all_pontos(filepath="dados-teste/pontos.txt"):
+def get_all_pontos(filepath="../dados-teste/pontos.txt"):
     pontos = []
     with open(filepath, "r", encoding="utf-8") as f:
         linhas = f.read().strip().split("\n")
@@ -19,5 +19,5 @@ def get_all_pontos(filepath="dados-teste/pontos.txt"):
             })
     return pontos
 
-def get_pontos_by_user(usuario_id, filepath="dados-teste/pontos.txt"):
+def get_pontos_by_user(usuario_id, filepath="../dados-teste/pontos.txt"):
     return [p for p in get_all_pontos(filepath) if p["usuario_id"] == str(usuario_id)]
