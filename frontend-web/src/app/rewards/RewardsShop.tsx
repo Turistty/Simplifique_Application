@@ -422,7 +422,7 @@ export default function RewardsPage(): React.ReactElement {
               placeholder="Buscar brinde..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="flex-1 px-4 py-2 rounded-lg border border-gray-300 text-[#00205b] focus:ring-2 focus:ring-[#41b6e6]"
+              className="flex-1 px-4 py-2 rounded-lg border border-gray-300 text-[#c3c7cd] focus:ring-2 focus:ring-[#41b6e6]"
             />
             <select
               value={sort}
