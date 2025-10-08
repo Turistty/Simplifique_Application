@@ -14,6 +14,17 @@ Simplifique/
 │   │   │   ├── auth_controller.py     # rotas Flask de login
 │   │   │   └── auth_middleware.py 
 │   │   │
+│   │   ├── Brindes/
+│   │   │   ├── brindes_controller.py
+│   │   │   ├── brindes_repository.py        
+│   │   │   ├── brindes_service.py     
+│   │   │   └── estoque_service.py 
+│   │   │
+│   │   ├── Movimentacoes/
+│   │   │   ├── movimentacoes_service.py        
+│   │   │   ├── movimentacoes_controller.py     
+│   │   │   └── movimentacoes_repository.py 
+│   │   │
 │   │   ├── Users/
 │   │   │   ├── __init__.py
 │   │   │   ├── user_repository.py     # leitura de users.txt (ou SQL futuramente)
