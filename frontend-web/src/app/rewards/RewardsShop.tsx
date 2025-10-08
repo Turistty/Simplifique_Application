@@ -336,49 +336,70 @@ export default function RewardsPage(): React.ReactElement {
     setTimeout(() => setNotification(""), 3000);
   }
 
-  function addToCart(item: Reward, size?: string) {
-    if (userPoints == null) return;
-
-    const variant = findVariantForSize(item, size);
-    if (!variant) return;
-
-    if ((variant.pointsCost ?? 0) <= 0) {
-      showNotification("❌ Brinde indisponível para resgate (custo não definido).");
-      return;
-    }
-
-    if ((variant.stock ?? 0) <= 0) {
-      showNotification("❌ Sem estoque disponível para essa variação.");
-      return;
-    }
-
-    const key = `${variant.id}_${size || ""}`;
-    setAddingKey(key);
-    setTimeout(() => {
-      setCart((prev) => {
-        const exist = prev.find((i) => i.key === key);
-        if (exist) {
-          const nextQty = exist.quantity + 1;
-          if (userPoints >= exist.pointsCost * nextQty && nextQty <= (variant.stock ?? Infinity)) {
-            return prev.map((i) => (i.key === key ? { ...i, quantity: nextQty } : i));
-          }
-          showNotification("❌ Pontos insuficientes ou estoque insuficiente para aumentar a quantidade");
-          return prev;
-        }
-        const newItem: CartItem = {
-          key,
-          variantId: variant.id,
-          name: item.name,
-          imageUrl: variant.imageUrl || item.imageUrl || "/logos/Simplifique.png",
-          pointsCost: variant.pointsCost,
-          quantity: 1,
-          selectedSize: size,
-        };
-        return [...prev, newItem];
-      });
-      setAddingKey(null);
-    }, 250);
+function addToCart(item: Reward, size?: string) {
+  if (userPoints == null) {
+    showNotification("❌ Usuário não autenticado ou pontos indisponíveis.");
+    return { success: false };
   }
+
+  const variant = findVariantForSize(item, size);
+  if (!variant) {
+    showNotification("❌ Variação não encontrada.");
+    return { success: false };
+  }
+
+  if ((variant.pointsCost ?? 0) <= 0) {
+    showNotification("❌ Brinde indisponível para resgate (custo não definido).");
+    return { success: false };
+  }
+
+  if ((variant.stock ?? 0) <= 0) {
+    showNotification("❌ Sem estoque disponível para essa variação.");
+    return { success: false };
+  }
+
+  if (userPoints < (variant.pointsCost ?? 0)) {
+    showNotification("❌ Pontos insuficientes para resgatar este brinde.");
+    return { success: false };
+  }
+
+  const key = `${variant.id}_${size || ""}`;
+  setAddingKey(key);
+
+  setTimeout(() => {
+    setCart((prev) => {
+      const exist = prev.find((i) => i.key === key);
+      if (exist) {
+        const nextQty = exist.quantity + 1;
+        if (userPoints >= exist.pointsCost * nextQty && nextQty <= (variant.stock ?? Infinity)) {
+          showNotification("✅ Quantidade aumentada com sucesso!");
+          return prev.map((i) =>
+            i.key === key ? { ...i, quantity: nextQty } : i
+          );
+        }
+        showNotification("❌ Pontos insuficientes ou estoque insuficiente para aumentar a quantidade.");
+        return prev;
+      }
+
+      const newItem: CartItem = {
+        key,
+        variantId: variant.id,
+        name: item.name,
+        imageUrl: variant.imageUrl || item.imageUrl || "/logos/Simplifique.png",
+        pointsCost: variant.pointsCost,
+        quantity: 1,
+        selectedSize: size,
+      };
+
+      showNotification("✅ Brinde adicionado com sucesso!");
+      return [...prev, newItem];
+    });
+    setAddingKey(null);
+  }, 250);
+
+  return { success: true };
+}
+
 
   function removeFromCart(key: string) {
     setCart((prev) =>
@@ -548,60 +569,96 @@ export default function RewardsPage(): React.ReactElement {
         );
           })}
         </div>
-      </main>
+        </main>
 
-      {/* DRAWER — Detalhe */}
-      {detailOpen && selected && (
-        <div className="fixed inset-0 z-50 flex">
-          <div className="absolute inset-0 bg-black/50" onClick={() => setDetailOpen(false)} />
-          <aside className="relative ml-auto bg-white w-full max-w-md h-full p-6 shadow-2xl flex flex-col">
-            <button onClick={() => setDetailOpen(false)} className="self-end mb-4 text-xl">
-              ✖
-            </button>
-            <img src={selected.imageUrl || "/logos/Simplifique.png"} alt={selected.name} className="w-full h-100 object-cover rounded-lg" />
-            <h2 className="mt-4 text-2xl font-semibold">{selected.name}</h2>
-            <p className="mt-2 text-[#75787b]">{selected.description}</p>
-            <p className="mt-2 text-sm text-[#75787b] whitespace-pre-line">{selected.details}</p>
+        {/* DRAWER — Detalhe */}
+        {detailOpen && selected && (
+          <div className="fixed inset-0 z-50 flex">
+            <div className="absolute inset-0 bg-black/50" onClick={() => setDetailOpen(false)} />
+            <aside className="relative ml-auto bg-white w-full max-w-md h-full p-6 shadow-2xl flex flex-col">
+          <button onClick={() => setDetailOpen(false)} className="self-end mb-4 text-xl">
+            ✖
+          </button>
+          <img src={selected.imageUrl || "/logos/Simplifique.png"} alt={selected.name} className="w-full h-100 object-cover rounded-lg" />
+          <h2 className="mt-4 text-2xl font-semibold">{selected.name}</h2>
+          <p className="mt-2 text-[#75787b]">{selected.description}</p>
+          <p className="mt-2 text-sm text-[#75787b] whitespace-pre-line">{selected.details}</p>
 
-            {selected.sizes && selected.sizes.length > 0 && (
-              <div className="mt-4">
-                <label className="block text-sm font-medium mb-1">Tamanho:</label>
-                <select value={selectedSize} onChange={(e) => setSelectedSize(e.target.value)} className="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#41b6e6]">
-                  {selected.sizes.map((sz) => (
-                    <option key={sz} value={sz}>
-                      {sz}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            )}
+          {selected.sizes && selected.sizes.length > 0 && (
+            <div className="mt-4">
+              <label className="block text-sm font-medium mb-1">Tamanho:</label>
+              <select value={selectedSize} onChange={(e) => setSelectedSize(e.target.value)} className="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#41b6e6]">
+            {selected.sizes.map((sz) => (
+              <option key={sz} value={sz}>
+                {sz}
+              </option>
+            ))}
+              </select>
+            </div>
+          )}
 
-            <div className="mt-auto">
-              <div className="flex items-center justify-between mb-4">
-                <span className="text-2xl font-bold text-[#1e2a63]">
-                  {(() => {
+          <div className="mt-auto">
+            <div className="flex items-center justify-between mb-4">
+              <span className="text-2xl font-bold text-[#1e2a63]">
+            {(() => {
+              const v = findVariantForSize(selected, selectedSize);
+              const cost = v?.pointsCost || selected.pointsCost || 0;
+              return cost > 0 ? `${cost} pts` : "Indisponível";
+            })()}
+              </span>
+                <button
+                onClick={() => {
+                  addToCart(selected, selected.sizes ? selectedSize : undefined);
+
+                }}
+                disabled={
+                  addingKey === `${findVariantForSize(selected, selectedSize)?.id || selected.id}_${selectedSize}` ||
+                  (() => {
+                  const v = findVariantForSize(selected, selectedSize);
+                  const cost = v?.pointsCost || selected.pointsCost || 0;
+                  const stock = v?.stock ?? selected.stock ?? 0;
+                  return cost <= 0 || stock <= 0 || (userPoints ?? 0) < cost;
+                  })()
+                }
+                className={`px-4 py-2 rounded-lg font-semibold transition ${
+                  (() => {
+                  const v = findVariantForSize(selected, selectedSize);
+                  const cost = v?.pointsCost || selected.pointsCost || 0;
+                  const stock = v?.stock ?? selected.stock ?? 0;
+                  if (cost > 0 && stock > 0 && (userPoints ?? 0) >= cost) {
+                    return "bg-[#41b6e6] text-white hover:bg-[#33a1d1]";
+                  }
+                  return "bg-[#c8c9c7] text-[#75787b] cursor-not-allowed";
+                  })()
+                }`}
+                >
+                {addingKey === `${findVariantForSize(selected, selectedSize)?.id || selected.id}_${selectedSize}`
+                  ? "Adicionando..."
+                  : (() => {
                     const v = findVariantForSize(selected, selectedSize);
                     const cost = v?.pointsCost || selected.pointsCost || 0;
-                    return cost > 0 ? `${cost} pts` : "Indisponível";
+                    const stock = v?.stock ?? selected.stock ?? 0;
+                    if (cost <= 0) return "Indisponível";
+                    if (stock <= 0) return "Sem estoque";
+                    if ((userPoints ?? 0) < cost) return "Pontos insuficientes";
+                    return "+ Adicionar";
                   })()}
-                </span>
-                <button
-                  onClick={() => addToCart(selected, selected.sizes ? selectedSize : undefined)}
-                  disabled={addingKey === `${findVariantForSize(selected, selectedSize)?.id || selected.id}_${selectedSize}`}
-                  className="px-4 py-2 bg-[#41b6e6] text-white rounded-lg hover:bg-[#33a1d1] transition"
-                >
-                  {addingKey === `${findVariantForSize(selected, selectedSize)?.id || selected.id}_${selectedSize}` ? "Adicionando..." : "+ Adicionar"}
                 </button>
-              </div>
-              <button onClick={() => setDetailOpen(false)} className="w-full py-2 text-center rounded-lg border border-gray-300">
-                Voltar
-              </button>
             </div>
-          </aside>
-        </div>
-      )}
+            <div className="flex justify-between items-center mb-4">
+              <span className="text-sm text-[#75787b]">
+            Estoque: {findVariantForSize(selected, selectedSize)?.stock ?? selected.stock}
+              </span>
+            </div>
+            <button onClick={() => setDetailOpen(false)} className="w-full py-2 text-center rounded-lg border border-gray-300">
+              Voltar
+            </button>
+          </div>
+            </aside>
+          </div>
+        )}
 
-      {/* DRAWER — Carrinho */}
+        {/* DRAWER — Carrinho */}
         {cartOpen && (
           <div className="fixed inset-0 z-40 flex">
             <div className="absolute inset-0 bg-black/50" onClick={() => setCartOpen(false)} />

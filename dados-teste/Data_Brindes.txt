@@ -1,5 +1,5 @@
 ID;PRODUCT_ID;SKU;Nome;Descricao;Detalhes;Categoria;Tamanho;Custo;Estoque_Inicial;URL;Data_Cadastro;Ultima_Modificacao;Ativo;Tags
-1;1;BRD-0001;Caneta;Caneta esferográfica personalizada;;Escritorio;;10;100;https://www.redd.com.br/imagem/caneta-de-metal-com-ponteira-touch-personalizada-pg1001141-6.webp;03/10/2025;03/10/2025;1;
+1;1;BRD-0001;Caneta;Caneta esferográfica personalizada;caneta 1100 sajidjsi dsjisdjijisd sdjisdji sdusdjisd;Escritorio;;10;100;https://www.redd.com.br/imagem/caneta-de-metal-com-ponteira-touch-personalizada-pg1001141-6.webp;03/10/2025;03/10/2025;1;
 2;2;BRD-0002;Chaveiro;Chaveiro metálico com logo;;Escritorio;;20;0;https://www.redd.com.br/imagem/chaveiro-carro-de-metal-personalizado-pg6388-2.webp;03/10/2025;03/10/2025;1;
 3;3;BRD-0003;Necessaire;Necessaire compacta para acessórios;;Acessorios;;25;50;https://www.redd.com.br/imagem/necessaire-personalizada-pg1001300-3.webp;03/10/2025;03/10/2025;1;
 4;4;BRD-0004;Suporte Celular/GPS;Suporte universal para celular/GPS;;Viagem;;30;20;https://www.redd.com.br/imagem/suporte-veicular-personalizado-pg6267-2.webp;03/10/2025;03/10/2025;1;
