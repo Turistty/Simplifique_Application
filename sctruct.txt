@@ -4,14 +4,14 @@ Simplifique/
 │   ├── Modules/
 │   │   ├── Admin/
 │   │   │   ├── __init__.py
-│   │   │   ├── admin_service.py        # regras de autenticação
-│   │   │   ├── admin_controller.py     # rotas Flask de login
+│   │   │   ├── admin_service.py
+│   │   │   ├── admin_controller.py
 │   │   │   └── admin_middleware.py 
 │   │   │
 │   │   ├── Auth/
 │   │   │   ├── __init__.py
-│   │   │   ├── auth_service.py        # regras de autenticação
-│   │   │   ├── auth_controller.py     # rotas Flask de login
+│   │   │   ├── auth_service.py
+│   │   │   ├── auth_controller.py
 │   │   │   └── auth_middleware.py 
 │   │   │
 │   │   ├── Brindes/
@@ -27,69 +27,68 @@ Simplifique/
 │   │   │
 │   │   ├── Users/
 │   │   │   ├── __init__.py
-│   │   │   ├── user_repository.py     # leitura de users.txt (ou SQL futuramente)
-│   │   │   └── user_service.py        # regras de negócio de usuários
+│   │   │   ├── user_repository.py
+│   │   │   └── user_service.py
 │   │   │
 │   │   ├── Pontos/
 │   │   │   ├── __init__.py
-│   │   │   ├── pontos_repository.py   # leitura de pontos.txt (ou SQL futuramente)
-│   │   │   ├── pontos_service.py      # cálculo de saldos
-│   │   │   └── ponots_controller.py 
+│   │   │   ├── pontos_repository.py
+│   │   │   ├── pontos_service.py
+│   │   │   └── pontos_controller.py   # corrigido de ponots_controller.py
 │   │   │
 │   │   └── Shared/
 │   │       ├── __init__.py
-│   │       └── db_connection.py       # conexão futura com SQL Server
+│   │       └── db_connection.py
 │   │
-│   ├── app.py                         # inicialização Flask e registro de rotas
+│   ├── app.py
 │   └── requirements.txt
 │
 ├── frontend-web/                   
 │   ├── package.json                
 │   ├── next.config.js              
-│   ├── requeriments.txt
+│   ├── requirements.txt            # corrigido de requeriments.txt
 │   ├── tailwind.config.js
 │   ├── middleware.ts
 │   ├── public/
-|   |	 └─ logos/
-|   |         └── Simplifique.png
+│   │   └── logos/
+│   │       └── Simplifique.png
 │   └── src/
-│     ├──lib/
-|	 |   └── api.ts 
-|	 └─ app/
-|	    ├─ favicon.ico       
-|	    ├─ globals.css       
-|	    ├─ layout.tsx       
-|	    ├─ page.tsx       
-|	    ├─ admin/
-|   	    |  ├── page.tsx
-|   	    |  └── AdminDashboard.tsx
-|	    ├─ componentes/
-|   	    |  └── ThemeToggle.tsx       
-|	    ├─ login/
-|   	    |  └── page.tsx     
-|	    ├─ rewards/
-|   	    |    ├── page.tsx                        # carrega RewardsShop
-|        |    ├── RewardsShop.tsx                # componente principal (coordenador)
-|        |    ├── components/
-|        |    │   ├── RewardCard.tsx             # item do catálogo
-|        |    │   ├── RewardDetailDrawer.tsx     # detalhamento do item
-|        |    │   └── CartDrawer.tsx             # carrinho
-|        |    ├── hooks/
-|        |    │   └── useRewards.ts              # lógica de fetch + fallback
-|        |    ├── services/
-|        |    │   └── rewardsService.ts          # comunicação com a API
-|        |    ├── utils/
-|        |    │   ├── normalizeBackendItem.ts    # parser de itens (flat ou nested)
-|        |    │   └── helpers.ts                 # funções como `getProp`, `safeNumber`
-|        |    └── types/
-|        |        └── reward.ts                  # interfaces Reward, Variant, etc.
-|	    └── user/
-|   	       ├── page.tsx 
-|   	       └── UserDashboard.tsx      
-|
+│       ├── lib/
+│       │   └── api.ts 
+│       └── app/
+│           ├── favicon.ico       
+│           ├── globals.css       
+│           ├── layout.tsx       
+│           ├── page.tsx       
+│           ├── admin/
+│           │   ├── page.tsx
+│           │   └── AdminDashboard.tsx
+│           ├── componentes/
+│           │   └── ThemeToggle.tsx       
+│           ├── login/
+│           │   └── page.tsx     
+│           ├── rewards/
+│           │   ├── page.tsx
+│           │   ├── RewardsShop.tsx
+│           │   ├── components/
+│           │   │   ├── RewardCard.tsx
+│           │   │   ├── RewardDetailDrawer.tsx
+│           │   │   └── CartDrawer.tsx
+│           │   ├── hooks/
+│           │   │   └── useRewards.ts
+│           │   ├── services/
+│           │   │   └── rewardsService.ts
+│           │   ├── utils/
+│           │   │   ├── normalizeBackendItem.ts
+│           │   │   └── helpers.ts
+│           │   └── types/
+│           │       └── reward.ts
+│           └── user/
+│               ├── page.tsx 
+│               └── UserDashboard.tsx      
+│
 └── dados-teste/
      ├── users.txt 
-     ├── Data_Brindes.txt 
-     ├── Data_Movimentation.txt 
+     ├── data_brindes.txt            # padronizado para minúsculo e _
+     ├── data_movimentacoes.txt      # padronizado para minúsculo e _
      └── pontos.txt
-

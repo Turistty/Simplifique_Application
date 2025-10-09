@@ -128,7 +128,7 @@ const RewardDetailDrawer: React.FC<RewardDetailDrawerProps> = ({
 
           <button
             onClick={onClose}
-            className="w-full py-2 text-center rounded-lg border border-gray-300 hover:bg-gray-100 transition"
+            className="w-full py-2 text-center rounded-lg border border-gray-500 hover:bg-gray-300 transition"
           >
             Voltar
           </button>
