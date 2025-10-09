@@ -7,8 +7,6 @@ from Modules.Brindes.brindes_controller import brindes_bp
 from Modules.Movimentacoes.movimentacoes_controller import movs_bp
 
 
-
-
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "troque-por-uma-chave-forte"
 
