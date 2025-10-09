@@ -68,8 +68,21 @@ Simplifique/
 |	    ├─ login/
 |   	    |  └── page.tsx     
 |	    ├─ rewards/
-|   	    |  ├── page.tsx 
-|   	    |  └── RewardsShop.tsx     
+|   	    |    ├── page.tsx                        # carrega RewardsShop
+|        |    ├── RewardsShop.tsx                # componente principal (coordenador)
+|        |    ├── components/
+|        |    │   ├── RewardCard.tsx             # item do catálogo
+|        |    │   ├── RewardDetailDrawer.tsx     # detalhamento do item
+|        |    │   └── CartDrawer.tsx             # carrinho
+|        |    ├── hooks/
+|        |    │   └── useRewards.ts              # lógica de fetch + fallback
+|        |    ├── services/
+|        |    │   └── rewardsService.ts          # comunicação com a API
+|        |    ├── utils/
+|        |    │   ├── normalizeBackendItem.ts    # parser de itens (flat ou nested)
+|        |    │   └── helpers.ts                 # funções como `getProp`, `safeNumber`
+|        |    ├── types/
+|        |    │   └── reward.ts                  # interfaces Reward, Variant, etc.
 |	    └── user/
 |   	       ├── page.tsx 
 |   	       └── UserDashboard.tsx      
